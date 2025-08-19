@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/flowui/menu">
+
+    <menu id="application" title="msg://com.company.jmixdatastore/menu.application.title" opened="true">
+        <item view="User.list" title="msg://com.company.jmixdatastore.view.user/UserListView.title"/>
+        <item view="SourceDb.list" title="msg://com.company.jmixdatastore.view.sourcedb/sourceDbListView.title"/>
+        <item view="DbManagementView" title="msg://com.company.jmixdatastore.view.dbmanagement/dbManagementView.title"/>
+    </menu>
+
+</menu-config>

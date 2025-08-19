@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://dbManagementView.title">
+    <data>
+        <collection id="sourceDbsDc" class="com.company.jmixdatastore.entity.SourceDb">
+            <loader id="sourceDbsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from SourceDb e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+
+        <keyValueCollection id="tablesDc">
+            <properties>
+                <property name="name" datatype="string"/>
+                <property name="description" datatype="string"/>
+            </properties>
+        </keyValueCollection>
+
+        <keyValueCollection id="fieldsDc">
+            <properties>
+                <property name="name" datatype="string"/>
+                <property name="dataType" datatype="string"/>
+                <property name="size" datatype="int"/>
+                <property name="nullable" datatype="boolean"/>
+                <property name="default" datatype="string"/>
+                <property name="description" datatype="string"/>
+            </properties>
+        </keyValueCollection>
+    </data>
+
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+
+    <layout>
+        <!-- Header Panel -->
+        <hbox spacing="true"
+              padding="true"
+              width="100%">
+            <h3 text="Quản lý cơ sở dữ liệu"/>
+            <entityComboBox id="dbSourseComboBox"
+                            itemsContainer="sourceDbsDc"
+                            metaClass="SourceDb"
+                            width="300px"
+                            placeholder="Chọn database"/>
+            <button id="newButton" text="Tạo mới"/>
+        </hbox>
+
+        <!-- Main Content Area -->
+        <split width="100%"
+               height="100%"
+               orientation="HORIZONTAL"
+               splitPosition="40%">
+
+            <!-- Left Panel - Tables -->
+            <vbox spacing="true"
+                  padding="true"
+                  width="100%"
+                  height="100%">
+
+                <hbox width="100%" spacing="true">
+                    <h4 text="Danh sách bảng"/>
+                </hbox>
+
+                <dataGrid id="keyValueEntitiesDataGrid"
+                          dataContainer="tablesDc"
+                          width="100%"
+                          height="100%">
+                    <columns>
+                        <column property="name"
+                                header="Tên bảng"
+                                width="200px"/>
+                        <column property="description"
+                                header="Mô tả"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+
+            <!-- Right Panel - Fields -->
+            <vbox spacing="true"
+                  padding="true"
+                  width="100%"
+                  height="100%">
+
+                <hbox width="100%" spacing="true">
+                    <h4 text="Chi tiết bảng"/>
+                </hbox>
+
+                <dataGrid id="keyValueEntitiesDataGrid_1"
+                          dataContainer="fieldsDc"
+                          width="100%"
+                          height="100%">
+                    <columns>
+                        <column property="name"
+                                header="Tên cột"
+                                width="150px"/>
+                        <column property="dataType"
+                                header="Kiểu dữ liệu"
+                                width="120px"/>
+                        <column property="size"
+                                header="Kích thước"
+                                width="100px"/>
+                        <column property="nullable"
+                                header="Null?"
+                                width="80px"/>
+                        <column property="default"
+                                header="Giá trị mặc định"
+                                width="140px"/>
+                        <column property="description"
+                                header="Mô tả"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+        </split>
+
+        <!-- Status Bar -->
+        <hbox spacing="true"
+              padding="true"
+              width="100%">
+            <span id="connectionStatus" text="Trạng thái: Chưa kết nối"/>
+            <span id="tableCount" text="Tổng số bảng: 0"/>
+            <span id="fieldCount" text="Tổng số cột: 0"/>
+        </hbox>
+    </layout>
+</view>

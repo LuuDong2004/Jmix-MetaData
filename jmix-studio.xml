@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JmixDataStoreSettingsManager">
+    <moduleSettings>
+      <entry key="DbConnect.main">
+        <ModuleSettings>
+          <option name="dataStoreOptionsV2">
+            <map>
+              <entry key="main">
+                <value>
+                  <DataStoreSettingsV2 />
+                </value>
+              </entry>
+              <entry key="pg">
+                <value>
+                  <DataStoreSettingsV2>
+                    <option name="supportedTypes">
+                      <option value="postgres" />
+                    </option>
+                  </DataStoreSettingsV2>
+                </value>
+              </entry>
+              <entry key="staging">
+                <value>
+                  <DataStoreSettingsV2 />
+                </value>
+              </entry>
+            </map>
+          </option>
+        </ModuleSettings>
+      </entry>
+    </moduleSettings>
+  </component>
+</project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://sourceDbDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="sourceDbDc"
+                  class="com.company.jmixdatastore.entity.SourceDb">
+            <fetchPlan extends="_base"/>
+            <loader id="sourceDbDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="sourceDbDc">
+
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="nameField" property="name"/>
+            <comboBox id="dbtypeField" property="dbtype" label="DB Type" title="Chọn DB"/>
+            <textField id="urlField" property="url"/>
+            <textField id="portField" property="port"/>
+            <textField id="usernameField" property="username"/>
+            <textField id="passwordField" property="password"/>
+            <textField id="dbnameField" property="dbname"/>
+            <textField id="hostField" property="host"/>
+        </formLayout>
+
+        <hbox id="detailActions">
+            <button id="test_connection" text="Connect"/>
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>
