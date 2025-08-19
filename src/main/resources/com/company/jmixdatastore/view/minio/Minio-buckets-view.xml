@@ -1,0 +1,30 @@
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="MinIO Buckets"
+      focusComponent="bucketsTable"
+      controller="com.company.jmixdatastore.view.minio.MinioBucketsView">
+
+    <data>
+        <collection id="bucketsDc"
+                    class="com.company.jmixdatastore.dto.BucketInfo"/>
+    </data>
+
+    <layout expand="bucketsTable" spacing="true">
+        <hbox spacing="true">
+            <textField id="bucketNameField" label="Bucket name" clearButtonVisible="true"/>
+            <button id="createBtn" text="Create"/>
+            <button id="refreshBtn" text="Refresh"/>
+            <button id="deleteBtn" text="Delete" themeNames="error"/>
+        </hbox>
+
+        <dataGrid id="bucketsTable"
+                  dataContainer="bucketsDc"
+                  width="100%" height="100%">
+            <columns>
+                <column property="name"/>
+                <column property="creationDate"/>
+            </columns>
+        </dataGrid>
+    </layout>
+</view>
+
+

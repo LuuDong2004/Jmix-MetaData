@@ -5,6 +5,8 @@
         <item view="User.list" title="msg://com.company.jmixdatastore.view.user/UserListView.title"/>
         <item view="SourceDb.list" title="msg://com.company.jmixdatastore.view.sourcedb/sourceDbListView.title"/>
         <item view="DbManagementView" title="msg://com.company.jmixdatastore.view.dbmanagement/dbManagementView.title"/>
+        <item view="MinioView" title="msg://com.company.jmixdatastore.view.minio/minioView.title"/>
+        <!-- merged bucket mgmt into MinioView -->
     </menu>
 
 </menu-config>

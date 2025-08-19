@@ -1,0 +1,57 @@
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="MinIO Browser"
+      focusComponent="filesTable"
+      controller="com.company.jmixdatastore.view.minio.MinioView">
+
+    <!-- dataContainer phải ở mức view -->
+    <data>
+        <collection id="bucketsDc"
+                    class="com.company.jmixdatastore.dto.BucketInfo"/>
+        <collection id="filesDc"
+                    class="com.company.jmixdatastore.dto.ObjectInfo"/>
+    </data>
+
+    <layout spacing="true" width="100%" height="100%">
+        <hbox width="100%" height="100%" spacing="true">
+            <!-- Left: Buckets -->
+            <vbox width="30%" height="100%" spacing="true">
+                <textField id="newBucketField" label="New bucket" clearButtonVisible="true"/>
+                <hbox spacing="true">
+                    <button id="createBucketBtn" text="Create bucket"/>
+                    <button id="deleteBucketBtn" text="Delete bucket" themeNames="error"/>
+                </hbox>
+                <dataGrid id="bucketsTable"
+                          dataContainer="bucketsDc"
+                          width="100%" height="100%">
+                    <columns>
+                        <column property="name"/>
+                        <column property="creationDate"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+
+            <!-- Right: Files of selected bucket -->
+            <vbox width="70%" height="100%" spacing="true">
+                <hbox spacing="true">
+                    <textField id="prefixField" label="Prefix" clearButtonVisible="true"/>
+                    <fileUploadField id="uploadField" storage="memory" autoUpload="true"/>
+                    <button id="searchBtn" text="Search"/>
+                    <button id="downloadBtn" text="Download"/>
+                    <button id="deleteBtn" text="Delete" themeNames="error"/>
+                </hbox>
+                <dataGrid id="filesTable"
+                          dataContainer="filesDc"
+                          width="100%" height="100%">
+                    <columns>
+                        <column property="key"/>
+                        <column property="size"/>
+                        <column property="contentType"/>
+                        <column property="lastModified"/>
+                    </columns>
+                </dataGrid>
+                <label id="statusLabel"/>
+            </vbox>
+        </hbox>
+    </layout>
+</view>
+

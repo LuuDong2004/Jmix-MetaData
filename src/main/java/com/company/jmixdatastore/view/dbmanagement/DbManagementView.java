@@ -2,7 +2,7 @@ package com.company.jmixdatastore.view.dbmanagement;
 
 import com.company.jmixdatastore.entity.SourceDb;
 import com.company.jmixdatastore.entity.TableGroup;
-import com.company.jmixdatastore.service.TableGroupingService;
+import com.company.jmixdatastore.service.dbcon.TableGroupingService;
 import com.company.jmixdatastore.service.dbcon.DbConnect;
 import com.company.jmixdatastore.service.dbcon.DbConnectFactory;
 import com.company.jmixdatastore.view.main.MainView;

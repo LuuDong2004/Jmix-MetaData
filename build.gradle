@@ -35,7 +35,8 @@ dependencies {
     implementation 'io.jmix.datatools:jmix-datatools-flowui-starter'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    //minio
+    implementation 'io.minio:minio:8.5.10'
 
     // PostgreSQL
     implementation 'org.postgresql:postgresql:42.7.4'

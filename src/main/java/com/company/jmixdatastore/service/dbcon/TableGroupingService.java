@@ -1,4 +1,4 @@
-package com.company.jmixdatastore.service;
+package com.company.jmixdatastore.service.dbcon;
 
 import com.company.jmixdatastore.entity.TableGroup;
 import org.springframework.stereotype.Service;
