@@ -14,8 +14,10 @@ import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.upload.FileUploadField;
 import io.jmix.flowui.kit.component.upload.event.FileUploadSucceededEvent;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextArea;
 
 import io.jmix.flowui.model.CollectionContainer;
+import io.jmix.flowui.model.InstanceContainer;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import io.jmix.flowui.view.StandardView;
@@ -26,8 +28,10 @@ import io.jmix.flowui.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+
 @Route(value = "minio-view", layout = MainView.class)
-@ViewController("MinioView")          // ID chính thức
+@ViewController("MinioView") // ID chính thức
 @ViewDescriptor("Minio-view.xml")
 public class MinioView extends StandardView {
 
@@ -50,6 +54,9 @@ public class MinioView extends StandardView {
     private CollectionContainer<ObjectInfo> filesDc;
 
     @ViewComponent
+    private InstanceContainer<ObjectInfo> selectedFileDc;
+
+    @ViewComponent
     private TextField prefixField;
 
     @ViewComponent
@@ -58,11 +65,94 @@ public class MinioView extends StandardView {
     @ViewComponent
     private Label statusLabel;
 
+    @ViewComponent
+    private TextArea fileInfoText;
+
+    @ViewComponent
+    private com.vaadin.flow.component.orderedlayout.VerticalLayout fileDetailPanel;
+
     @Subscribe
     public void onInit(InitEvent event) {
         loadBuckets();
         loadFiles();
         setStatus("Ready");
+
+        fileDetailPanel.setVisible(false);
+
+        // Thêm selection listener cho filesTable
+        filesTable.addSelectionListener(e -> {
+            var selected = e.getFirstSelectedItem();
+            if (selected.isPresent()) {
+                updateFileDetails(selected.get());
+            } else {
+                clearFileDetails();
+            }
+        });
+    }
+
+    private void updateFileDetails(ObjectInfo fileInfo) {
+        selectedFileDc.setItem(fileInfo);
+
+        // Hiển thị tab detail
+        fileDetailPanel.setVisible(true);
+
+        // Tạo thông tin chi tiết cho textArea
+        StringBuilder info = new StringBuilder();
+        info.append("File Details:\n");
+        info.append("=============\n\n");
+        info.append("Path: ").append(fileInfo.getKey()).append("\n");
+        info.append("Size: ").append(formatFileSize(fileInfo.getSize())).append("\n");
+        info.append("Content Type: ").append(fileInfo.getContentType() != null ? fileInfo.getContentType() : "Unknown")
+                .append("\n");
+
+        if (fileInfo.getLastModified() != null) {
+            info.append("Last Modified: ")
+                    .append(fileInfo.getLastModified().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                    .append("\n");
+        }
+
+        // Thêm thông tin bucket
+        String bucket = getSelectedBucketName();
+        if (bucket != null) {
+            info.append("Bucket: ").append(bucket).append("\n");
+        }
+
+        // Thêm thông tin về file type
+        String fileName = getFileNameFromKey(fileInfo.getKey());
+        info.append("File Name: ").append(fileName).append("\n");
+        info.append("File Extension: ").append(getFileExtension(fileName)).append("\n");
+
+        fileInfoText.setValue(info.toString());
+    }
+
+    private void clearFileDetails() {
+        selectedFileDc.setItem(null);
+        fileInfoText.setValue("No file selected");
+        // Ẩn tab detail
+        fileDetailPanel.setVisible(false);
+    }
+
+    private String formatFileSize(Long size) {
+        if (size == null)
+            return "Unknown";
+
+        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return String.format("%.1f %s", size / Math.pow(1024, digitGroups), units[digitGroups]);
+    }
+
+    private String getFileNameFromKey(String key) {
+        if (key == null)
+            return "";
+        int lastSlash = key.lastIndexOf('/');
+        return lastSlash >= 0 ? key.substring(lastSlash + 1) : key;
+    }
+
+    private String getFileExtension(String fileName) {
+        if (fileName == null)
+            return "";
+        int lastDot = fileName.lastIndexOf('.');
+        return lastDot >= 0 ? fileName.substring(lastDot + 1) : "";
     }
 
     @Subscribe("uploadField")
@@ -88,7 +178,8 @@ public class MinioView extends StandardView {
             }
             try (var is = new java.io.ByteArrayInputStream(content)) {
                 String contentType = java.net.URLConnection.guessContentTypeFromName(fileName);
-                if (contentType == null || contentType.isBlank()) contentType = "application/octet-stream";
+                if (contentType == null || contentType.isBlank())
+                    contentType = "application/octet-stream";
                 storage.put(bucket, key, is, content.length, contentType);
             }
             Notification.show("Uploaded: " + key);
@@ -191,6 +282,7 @@ public class MinioView extends StandardView {
             String bucket = getSelectedBucketName();
             if (bucket == null || bucket.isBlank()) {
                 filesDc.setItems(java.util.List.of());
+                clearFileDetails();
                 setStatus("Select a bucket to view files");
                 return;
             }
@@ -198,6 +290,11 @@ public class MinioView extends StandardView {
             List<ObjectInfo> list = storage.list(bucket, prefix == null ? "" : prefix);
             filesDc.setItems(list);
             setStatus("Loaded " + list.size() + " object(s) from '" + bucket + "'");
+
+            // Ẩn tab detail khi load files mới (vì chưa có file nào được chọn)
+            if (list.isEmpty()) {
+                clearFileDetails();
+            }
         } catch (Exception e) {
             Notification.show("Load error: " + e.getMessage());
             setStatus("Load failed");
@@ -225,8 +322,11 @@ public class MinioView extends StandardView {
                     bucketsTable.setItems(buckets);
                     bucketsTable.select(buckets.get(0));
                 }
-                // khi người dùng chọn bucket khác, tự động reload files
-                bucketsTable.addSelectionListener(e -> loadFiles());
+                // khi người dùng chọn bucket khác, tự động reload files và clear details
+                bucketsTable.addSelectionListener(e -> {
+                    loadFiles();
+                    clearFileDetails();
+                });
             }
         } catch (Exception e) {
             Notification.show("Load buckets failed: " + e.getMessage());
@@ -239,7 +339,8 @@ public class MinioView extends StandardView {
     }
 
     private void selectBucketByName(String name) {
-        if (bucketsDc == null || bucketsTable == null) return;
+        if (bucketsDc == null || bucketsTable == null)
+            return;
         var match = bucketsDc.getItems().stream()
                 .filter(b -> name.equals(b.getName()))
                 .findFirst();
@@ -276,4 +377,5 @@ public class MinioView extends StandardView {
         });
         dialog.open();
     }
+
 }

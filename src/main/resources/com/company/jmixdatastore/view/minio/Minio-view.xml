@@ -9,6 +9,8 @@
                     class="com.company.jmixdatastore.dto.BucketInfo"/>
         <collection id="filesDc"
                     class="com.company.jmixdatastore.dto.ObjectInfo"/>
+        <instance id="selectedFileDc"
+                  class="com.company.jmixdatastore.dto.ObjectInfo"/>
     </data>
 
     <layout spacing="true" width="100%" height="100%">
@@ -24,13 +26,13 @@
                           dataContainer="bucketsDc"
                           width="100%" height="100%">
                     <columns>
-                        <column property="name"/>
-                        <column property="creationDate"/>
+                        <column property="name" header="Name"/>
+                        <column property="creationDate" header="Created Date"/>
                     </columns>
                 </dataGrid>
             </vbox>
 
-            <!-- Right: Files of selected bucket -->
+            <!-- Center: Files of selected bucket -->
             <vbox width="70%" height="100%" spacing="true">
                 <hbox spacing="true">
                     <textField id="prefixField" label="Prefix" clearButtonVisible="true"/>
@@ -43,13 +45,29 @@
                           dataContainer="filesDc"
                           width="100%" height="100%">
                     <columns>
-                        <column property="key"/>
-                        <column property="size"/>
-                        <column property="contentType"/>
-                        <column property="lastModified"/>
+                        <column property="key" header="File Path"/>
+                        <column property="size" header="Size"/>
+                        <column property="contentType" header="Type"/>
+                        <column property="lastModified" header="Modified"/>
                     </columns>
                 </dataGrid>
                 <label id="statusLabel"/>
+            </vbox>
+
+            <!-- Right: File Details (Hidden by default) -->
+            <vbox id="fileDetailPanel" width="30%" height="100%" spacing="true" visible="false">
+                <h3 text="File Details" styleNames="text-primary"/>
+                <formLayout id="fileDetailForm" dataContainer="selectedFileDc" width="100%">
+                    <textField id="detailKey" property="key" label="File Path" readonly="true"/>
+                    <textField id="detailSize" property="size" label="Size (bytes)" readonly="true"/>
+                    <textField id="detailContentType" property="contentType" label="Content Type" readonly="true"/>
+                    <textField id="detailLastModified" property="lastModified" label="Last Modified" readonly="true"/>
+                </formLayout>
+                
+                <vbox spacing="true" width="100%">
+                    <label text="File Information" styleNames="text-secondary"/>
+                    <textArea id="fileInfoText" width="100%" height="200px" readonly="true"/>
+                </vbox>
             </vbox>
         </hbox>
     </layout>
