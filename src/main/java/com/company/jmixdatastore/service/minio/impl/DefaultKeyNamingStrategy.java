@@ -7,21 +7,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.commons.compress.utils.ArchiveUtils.sanitize;
+
 @Component
 public class DefaultKeyNamingStrategy implements KeyNamingStrategy {
     @Override
     public String buildKey(String tenantId, String userId, String originalFilename) {
-        String safe = (originalFilename == null ? "file" : originalFilename)
-                .replaceAll("[\\\\/\\s]+", "-");
-        String date = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
-        return "tenant/%s/user/%s/%s/%s".formatted(
-                nullOrBlank(tenantId) ? "defaultTenant" : tenantId,
-                nullOrBlank(userId)  ? "unknown"       : userId,
-                date,
-                safe
-        );
+        String safe = sanitize(originalFilename);
+        //String date = java.time.LocalDate.now().toString(); // YYYY-MM-DD
+        return "Upload/%s".formatted(safe);
     }
-
     private boolean nullOrBlank(String s) { return s == null || s.isBlank(); }
 
 }

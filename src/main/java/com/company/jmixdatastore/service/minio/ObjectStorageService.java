@@ -1,6 +1,4 @@
 package com.company.jmixdatastore.service.minio;
-
-
 import com.company.jmixdatastore.dto.ObjectInfo;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;

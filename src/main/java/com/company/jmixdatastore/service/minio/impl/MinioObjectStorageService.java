@@ -33,7 +33,7 @@ public class MinioObjectStorageService implements ObjectStorageService {
     public MinioObjectStorageService(MinioClient mc, MinioStorageProperties props) {
         this.mc = mc;
         this.props = props;
-        ensureBucketExists();
+        //ensureBucketExists();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MinioObjectStorageService implements ObjectStorageService {
 
             List<ObjectInfo> out = new ArrayList<>();
             for (Result<Item> r : it) {
-                Item item = r.get(); // có thể ném exception, để trong try/catch nếu muốn bỏ qua lỗi từng object
+                Item item = r.get();
                 out.add(new ObjectInfo(
                         item.objectName(),
                         item.size(),

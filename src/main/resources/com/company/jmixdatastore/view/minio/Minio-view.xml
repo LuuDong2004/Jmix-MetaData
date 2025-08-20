@@ -14,7 +14,7 @@
     <layout spacing="true" width="100%" height="100%">
         <hbox width="100%" height="100%" spacing="true">
             <!-- Left: Buckets -->
-            <vbox width="30%" height="100%" spacing="true">
+            <vbox width="25%" height="100%" spacing="true">
                 <textField id="newBucketField" label="New bucket" clearButtonVisible="true"/>
                 <hbox spacing="true">
                     <button id="createBucketBtn" text="Create bucket"/>
@@ -24,17 +24,24 @@
                           dataContainer="bucketsDc"
                           width="100%" height="100%">
                     <columns>
-                        <column property="name"/>
-                        <column property="creationDate"/>
+                        <column property="name"          header="Name"/>
+<!--                        <column property="creationDate"  header="Created at"/>-->
                     </columns>
                 </dataGrid>
             </vbox>
 
             <!-- Right: Files of selected bucket -->
             <vbox width="70%" height="100%" spacing="true">
-                <hbox spacing="true">
-                    <textField id="prefixField" label="Prefix" clearButtonVisible="true"/>
-                    <fileUploadField id="uploadField" storage="memory" autoUpload="true"/>
+                <hbox spacing="true" alignItems="CENTER">
+                    <textField id="prefixField"
+                               labelVisible="false"
+                               placeholder="File"
+                               clearButtonVisible="true"
+                               width="200px"/>
+                    <fileUploadField id="uploadField"
+                                     storage="memory"
+                                     autoUpload="true"
+                                     width="200px"/>
                     <button id="searchBtn" text="Search"/>
                     <button id="downloadBtn" text="Download"/>
                     <button id="deleteBtn" text="Delete" themeNames="error"/>
@@ -43,10 +50,10 @@
                           dataContainer="filesDc"
                           width="100%" height="100%">
                     <columns>
-                        <column property="key"/>
-                        <column property="size"/>
-                        <column property="contentType"/>
-                        <column property="lastModified"/>
+                        <column property="key"          header="Name"/>
+                        <column property="size"         header="Size"/>
+                        <column property="contentType"  header="Content Type"/>
+                        <column property="lastModified" header="Date"/>
                     </columns>
                 </dataGrid>
                 <label id="statusLabel"/>

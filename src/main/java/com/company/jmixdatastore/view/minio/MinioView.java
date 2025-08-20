@@ -83,7 +83,7 @@ public class MinioView extends StandardView {
             String key = keyNaming.buildKey("tenant1", "user1", fileName);
             String prefix = prefixField.getValue();
             if (prefix != null && !prefix.isBlank()) {
-                // tiền tố để "giả lập thư mục" nếu người dùng nhập prefix
+
                 key = (prefix.endsWith("/") ? prefix : prefix + "/") + key;
             }
             try (var is = new java.io.ByteArrayInputStream(content)) {
@@ -197,7 +197,7 @@ public class MinioView extends StandardView {
             String prefix = prefixField.getValue();
             List<ObjectInfo> list = storage.list(bucket, prefix == null ? "" : prefix);
             filesDc.setItems(list);
-            setStatus("Loaded " + list.size() + " object(s) from '" + bucket + "'");
+            setStatus("Loaded " + list.size() + " files from '" + bucket + "'");
         } catch (Exception e) {
             Notification.show("Load error: " + e.getMessage());
             setStatus("Load failed");
